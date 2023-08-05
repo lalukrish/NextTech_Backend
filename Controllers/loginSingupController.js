@@ -114,5 +114,14 @@ const Login_Signup_Controller = {
         .json({ message: "Internal Server error,Try again later" });
     }
   },
+  getSingleUser: async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const user = await Users.findOne(userId);
+      return res.status(200).json({ message: "user details", user: user });
+    } catch (error) {
+      return res.status(500).json({ message: "Interanl Server Error" });
+    }
+  },
 };
 module.exports = Login_Signup_Controller;
