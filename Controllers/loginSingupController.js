@@ -1,11 +1,14 @@
-import bcrypt from "bcrypt";
-import Users from "../Schema/userSchema";
-export const Login_Signup_Controller = {
+const bcrypt = require("bcrypt");
+const Users = require("../Schema/userSchema");
+const Jwt = require("jsonwebtoken");
+
+const Login_Signup_Controller = {
   userSignup: async (req, res) => {
     try {
       const userEmail = await Users.findOne({
-        email: req.body.eamil.toLowerCase(),
+        email: req.body.email.toLowerCase(),
       });
+
       const userName = await Users.findOne({
         user_name: req.body.user_name.toLowerCase(),
       });
@@ -17,11 +20,15 @@ export const Login_Signup_Controller = {
       } else if (userName) {
         res.status(409).json({ message: "user name is already exists" });
       } else if (phoneNumber) {
-        res.status(409).json({ message: "user name is already exists" });
+        res
+          .status(409)
+          .json({ message: "user phone number is already exists" });
       } else {
-        const password = req.bod.password;
+        const password = req.body.password;
+        console.log("data", password);
         const hashvalue = 12;
         const hashedPassword = await bcrypt.hash(password, hashvalue);
+
         const data = {
           full_name: req.body.full_name,
           email: req.body.email.toLowerCase(),
@@ -30,6 +37,7 @@ export const Login_Signup_Controller = {
           phone_number: req.body.phone_number,
           password: hashedPassword,
         };
+
         const newUser = new Users(data);
         try {
           const saved = await newUser.save();
@@ -46,7 +54,51 @@ export const Login_Signup_Controller = {
         "🚀 ~ file: loginSingupController.js:7 ~ userSignup ~ err:",
         error
       );
+      return res.status(500).json({ message: "Server error,try again", error });
     }
   },
-  userSignin: async (req, res) => {},
+  userSignin: async (req, res) => {
+    if (!req.body.email || !req.body.password) {
+      return res
+        .status(401)
+        .json({ message: "Login failed!Invalid credential" });
+    }
+    try {
+      const with_email = await Users.findOne({
+        email: req.body.email.toLowerCase(),
+      });
+      const with_username = await Users.findOne({
+        user_name: req.body.user_name.toLowerCase(),
+      });
+      const username_or_email = with_email ? with_email : with_username;
+      const password = req.body.password;
+      if (!username_or_email) {
+        return res
+          .status(401)
+          .json({ message: "Login Failed!Invalid Email or UserName" });
+      }
+      const currentPassword =
+        username_or_email?.password ?? with_username?.password;
+      bcrypt.compare(password, currentPassword, async function (err, result) {
+        if (err) {
+          return res.status(500).json({ message: "Internal server error" });
+        } else {
+          const token = Jwt.sign(
+            {
+              _id: username_or_email?._id ?? with_username?._id,
+            },
+            process.env.JWT
+          );
+          return res
+            .status(200)
+            .json({ message: "Login successfull", token: token });
+        }
+      });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "internal server error,try again" });
+    }
+  },
 };
+module.exports = Login_Signup_Controller;
