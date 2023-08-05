@@ -25,7 +25,7 @@ const Login_Signup_Controller = {
           .json({ message: "user phone number is already exists" });
       } else {
         const password = req.body.password;
-        console.log("data", password);
+
         const hashvalue = 12;
         const hashedPassword = await bcrypt.hash(password, hashvalue);
 
@@ -50,10 +50,10 @@ const Login_Signup_Controller = {
         }
       }
     } catch (error) {
-      console.log(
-        "🚀 ~ file: loginSingupController.js:7 ~ userSignup ~ err:",
-        error
-      );
+      // console.log(
+      //   "🚀 ~ file: loginSingupController.js:7 ~ userSignup ~ err:",
+      //   error
+      // );
       return res.status(500).json({ message: "Server error,try again", error });
     }
   },
@@ -68,10 +68,12 @@ const Login_Signup_Controller = {
         email: req.body.email.toLowerCase(),
       });
       const with_username = await Users.findOne({
-        user_name: req.body.user_name.toLowerCase(),
+        user_name: req.body.email.toLowerCase(),
       });
+
       const username_or_email = with_email ? with_email : with_username;
       const password = req.body.password;
+
       if (!username_or_email) {
         return res
           .status(401)
@@ -98,6 +100,18 @@ const Login_Signup_Controller = {
       return res
         .status(500)
         .json({ message: "internal server error,try again" });
+    }
+  },
+
+  getAllUser: async (req, res) => {
+    try {
+      const users = await Users.find();
+      console.log("urers", users);
+      return res.status(200).json({ message: "get all users", users: users });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Internal Server error,Try again later" });
     }
   },
 };
