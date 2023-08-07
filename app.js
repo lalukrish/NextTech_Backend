@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const app = express();
-//const userRouter = require("../NextTech_Backend/Routers/userRouter.js");
+const userRouter = require("./Routers/userRouter");
 
 const bodyParser = require("body-parser");
 
@@ -11,7 +11,7 @@ dotenv.config();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use("/", require("../NextTech_Backend/Routers/userRouter.js"));
+app.use("/", userRouter);
 //app.use("/admin");
 const DevServer = () => {
   app.listen(6000, () => {
