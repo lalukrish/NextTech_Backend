@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  block: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Users = mongoose.model("Users", userSchema);
