@@ -8,14 +8,14 @@ const AdminRouter = {
 blockUser: async (req, res) => {
     const userId = req.params.userId;
     try {
-      const user = await user.findById(userId);
+      const user = await Users.findById(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      if (user.blocked) {
+      if (user.block) {
         return res.status(200).json({ message: "User is already blocked" });
       }
-      user.blocked = true;
+      user.block= true;
       await user.save();
   
       return res.status(200).json({ message: "User has been blocked" });
