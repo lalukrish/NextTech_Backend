@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const userRouter = require("../NextTech_Backend/Routers/userRouter");
+const userRouter = require("/home/lalkrishna/personalProjects/Famkit_project/NextTech_Backend/Routers/userRouter.js");
 const app = express();
 const bodyParser = require("body-parser");
 
