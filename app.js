@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const adminRouter=require("./Routers/adminRouter")
 const app = express();
 const userRouter = require("./Routers/userRouter");
 
@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/", userRouter);
-//app.use("/admin");
+app.use("/admin",adminRouter);
 const DevServer = () => {
   app.listen(6000, () => {
     console.log(`server running on port${6000}`);
@@ -30,4 +30,3 @@ const DevServer = () => {
 };
 
 DevServer();
-console.log("hi");
