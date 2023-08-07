@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/", userRouter);
-
+//app.use("/admin");
 const DevServer = () => {
   app.listen(6000, () => {
     console.log(`server running on port${6000}`);
