@@ -1,5 +1,7 @@
 const express = require("express");
 const Login_Signup_Controller = require("../Controllers/loginSingupController");
+const Admin_Router = require("./adminRouter");
+
 
 const router = express.Router();
 
@@ -7,5 +9,8 @@ router.post("/user-signup", Login_Signup_Controller.userSignup);
 router.post("/user-signin", Login_Signup_Controller.userSignin);
 router.get("/get-all-users", Login_Signup_Controller.getAllUser);
 router.get("/get-one-user/:userId", Login_Signup_Controller.getSingleUser);
+router.post("/block-user", Admin_Router.blockUser);
+router.post("/unblock-user", Admin_Router.unblockUser);
+
 
 module.exports = router;
