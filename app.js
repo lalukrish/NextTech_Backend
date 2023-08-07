@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const app = express();
-const userRouter = require("../NextTech_Backend/Routers/userRouter");
+const userRouter = require("../NextTech_Backend/Routers/userRouter.js");
 
 const bodyParser = require("body-parser");
 
