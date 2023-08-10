@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const adminRouter = require("./Routers/adminRouter");
 const app = express();
 const userRouter = require("./Routers/userRouter");
 const adminRouter = require("./Routers/adminRouter");
@@ -31,4 +31,3 @@ const DevServer = () => {
 };
 
 DevServer();
-console.log("hi");

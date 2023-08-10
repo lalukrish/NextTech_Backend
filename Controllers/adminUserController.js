@@ -5,10 +5,6 @@ const Jwt = require("jsonwebtoken");
 const AdminRouter = {
   blockUser: async (req, res) => {
     const userId = req.params.userId;
-    console.log(
-      "🚀 ~ file: loginSingupController.js:7 ~ blockUser ~ userId:",
-      userId
-    );
     try {
       const user = await Users.findById(userId);
       if (!user) {
