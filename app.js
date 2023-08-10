@@ -5,9 +5,7 @@ const cors = require("cors");
 const adminRouter = require("./Routers/adminRouter");
 const app = express();
 const userRouter = require("./Routers/userRouter");
-const adminRouter = require("./Routers/adminRouter");
 const bodyParser = require("body-parser");
-const AdminRouter = require("./Controllers/adminUserController");
 
 dotenv.config();
 app.use(cors());
