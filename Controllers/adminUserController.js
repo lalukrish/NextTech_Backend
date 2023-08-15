@@ -3,6 +3,28 @@ const Users = require("../Schema/userSchema");
 const Jwt = require("jsonwebtoken");
 
 const AdminRouter = {
+  getAllUser: async (req, res) => {
+    try {
+      const skip = req.query.skip ?? 0;
+      const users = await Users.find();
+      console.log("urers", users);
+      return res.status(200).json({ message: "get all users", users: users });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Internal Server error,Try again later" });
+    }
+  },
+  getSingleUser: async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const user = await Users.findOne(userId);
+      return res.status(200).json({ message: "user details", user: user });
+    } catch (error) {
+      return res.status(500).json({ message: "Interanl Server Error" });
+    }
+  },
+
   blockUser: async (req, res) => {
     const userId = req.params.userId;
     try {
