@@ -107,6 +107,7 @@ const Login_Signup_Controller = {
 
   getAllUser: async (req, res) => {
     try {
+      const skip = req.query.skip ?? 0;
       const users = await Users.find();
       console.log("urers", users);
       return res.status(200).json({ message: "get all users", users: users });
