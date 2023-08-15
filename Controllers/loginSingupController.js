@@ -74,8 +74,8 @@ const Login_Signup_Controller = {
       });
 
       const username_or_email = with_email ? with_email : with_username;
-      const password = req.body.password;
 
+      const password = req.body.password;
       if (!username_or_email) {
         return res
           .status(401)
@@ -96,7 +96,7 @@ const Login_Signup_Controller = {
           return res.status(200).json({
             message: "Login successfull",
             token: token,
-            userid: with_email._id,
+            user: username_or_email,
           });
         }
       });
