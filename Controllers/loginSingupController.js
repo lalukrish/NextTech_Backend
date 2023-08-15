@@ -93,13 +93,11 @@ const Login_Signup_Controller = {
             },
             process.env.JWT
           );
-          return res
-            .status(200)
-            .json({
-              message: "Login successfull",
-              token: token,
-              userid: with_email.id,
-            });
+          return res.status(200).json({
+            message: "Login successfull",
+            token: token,
+            userid: with_email._id,
+          });
         }
       });
     } catch (error) {
