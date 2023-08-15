@@ -83,22 +83,22 @@ const Login_Signup_Controller = {
       }
       const currentPassword =
         username_or_email?.password ?? with_username?.password;
-      bcrypt.compare(password, currentPassword, async function (err, result) {
-        if (err) {
-          return res.status(500).json({ message: "Internal server error" });
-        } else {
-          const token = Jwt.sign(
-            {
-              _id: username_or_email?._id ?? with_username?._id,
-            },
-            process.env.JWT
-          );
-          return res.status(200).json({
-            message: "Login successfull",
-            token: token,
-            user: username_or_email,
-          });
-        }
+
+      if (!bcrypt.compareSync(password, currentPassword)) {
+        return res
+          .status(401)
+          .json({ message: "Login Failed! Incorrect password" });
+      }
+      const token = Jwt.sign(
+        {
+          _id: username_or_email?._id ?? with_username?._id,
+        },
+        process.env.JWT
+      );
+      return res.status(200).json({
+        message: "Login successfull",
+        token: token,
+        user: username_or_email,
       });
     } catch (error) {
       return res
