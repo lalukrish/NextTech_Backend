@@ -115,23 +115,26 @@ const Login_Signup_Controller = {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
+
       const full_name = req.body.full_name;
-      const updateUser = await Users.findByIdAndUpdate(
-        userId,
-        { full_name: full_name },
-        { new: true }
-      );
+      const updateUser = await Users.findByIdAndUpdate(userId, {
+        full_name: full_name,
+      });
 
       if (!updateUser) {
-        return res.status(404).message({ message: "user not updated" });
+        return res.status(404).json({ message: "User not updated" });
       }
+
       return res
         .status(200)
-        .json({ message: "user sucessfully updated", updateduser: updateUser });
+        .json({
+          message: "User successfully updated",
+          updatedUser: updateUser,
+        });
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "Server error, try again", error });
+        .json({ message: "Server error, try again", error: error.message });
     }
   },
 
