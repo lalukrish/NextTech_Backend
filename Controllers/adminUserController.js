@@ -17,11 +17,17 @@ const AdminRouter = {
   },
   getSingleUser: async (req, res) => {
     try {
-      const userId = req.params.id;
-      const user = await Users.findOne({ id: userId });
-      return res.status(200).json({ message: "user details", user: user });
+      const userId = req.params.userId;
+      console.log("userid", userId);
+      const user = await Users.findOne({ _id: userId }); // Specify the query to find by ID
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(200).json({ message: "User details", user: user });
     } catch (error) {
-      return res.status(500).json({ message: "Interanl Server Error" });
+      return res
+        .status(500)
+        .json({ message: "Internal Server Error", error: error.message });
     }
   },
 
