@@ -41,6 +41,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
+  profile_image_url: {
+    type: String,
+  },
+  profile_image_public_id: {
+    type: String,
+  },
 });
 
 const Users = mongoose.model("Users", userSchema);
