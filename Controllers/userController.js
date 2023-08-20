@@ -69,6 +69,21 @@ const user_Controller = {
         .json({ message: "Internal Server Error", error: error.message });
     }
   },
+  getProfilePicture: async (req, res) => {
+    const userId = req.params.id;
+    try {
+      const user = await Users.findById(userId);
+      data = {
+        profile_image_url: user.profile_image_url,
+        profile_image_public_id: user.profile_image_public_id,
+      };
+      return res
+        .status(200)
+        .json({ message: "user profile image data", data: data });
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
 };
 
 module.exports = user_Controller;
