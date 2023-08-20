@@ -12,19 +12,37 @@ cloudinary.config({
 
 const user_Controller = {
   editProfilePicture: async (req, res) => {
+    const userId = req.body.id;
+
     try {
-      const result = await cloudinary.v2.uploader.upload(req.file.path);
-      const profileImage = new Users({
-        profile_image_url: result.url,
-        profile_image_public_id: result.public_id,
-      });
-      await profileImage.save();
-      await fs.unlink(req.path.file);
+      // Find the user by their ID
+      const user = await Users.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Upload the image to Cloudinary
+      const imageResult = await cloudinary.v2.uploader.upload(req.file.path);
+
+      // Update the user's profile image fields
+      user.profile_image_url = imageResult.url;
+      user.profile_image_public_id = imageResult.public_id;
+
+      // Save the updated user object
+      await user.save();
+
+      // Delete the temporarily uploaded file
+      await fs.unlink(req.file.path);
+
       return res
         .status(200)
-        .json({ message: "profile picture update successfully" });
+        .json({ message: "Profile picture updated successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Interanl server error", error: error });
+      console.error("Internal server error", error);
+      return res
+        .status(500)
+        .json({ message: "Internal server error", error: error });
     }
   },
 
