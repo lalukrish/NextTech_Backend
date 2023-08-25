@@ -73,7 +73,7 @@ const user_Controller = {
     const userId = req.params.id;
     try {
       const user = await Users.findById(userId);
-      data = {
+      const data = {
         profile_image_url: user.profile_image_url,
         profile_image_public_id: user.profile_image_public_id,
       };
