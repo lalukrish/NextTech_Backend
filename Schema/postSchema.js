@@ -17,6 +17,11 @@ const postSchema = new mongoose.Schema({
   public_id: {
     type: String,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users", // This should match the name you used when defining the Users model
+    required: true,
+  },
 });
 
 const Posts = mongoose.model("Posts", postSchema);

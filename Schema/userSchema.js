@@ -21,10 +21,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  phone_number: {
-    type: String,
-    required: true,
-  },
   password: {
     type: String,
     required: true,
@@ -47,6 +43,12 @@ const userSchema = new mongoose.Schema({
   profile_image_public_id: {
     type: String,
   },
+  // posts: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "Posts", // Reference the Posts model
+  //   },
+  // ],
 });
 
 const Users = mongoose.model("Users", userSchema);

@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const Users = require("../Schema/userSchema");
 const Jwt = require("jsonwebtoken");
+const Posts = require("../Schema/postSchema");
 
 const AdminRouter = {
   getAllUser: async (req, res) => {
@@ -19,11 +20,14 @@ const AdminRouter = {
     try {
       const userId = req.params.userId;
       console.log("userid", userId);
-      const user = await Users.findOne({ _id: userId }); // Specify the query to find by ID
+      const user = await Users.findOne({ _id: userId });
+      const posts = await Posts.find({ user: userId }); // Specify the query to find by ID
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      return res.status(200).json({ message: "User details", user: user });
+      return res
+        .status(200)
+        .json({ message: "User details", user: user, posts: posts });
     } catch (error) {
       return res
         .status(500)
