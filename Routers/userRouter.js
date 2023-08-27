@@ -15,4 +15,5 @@ router.put("/edit-profile", Login_Signup_Controller.editProfile);
 router.put("/change-password", Login_Signup_Controller.changePassword);
 router.post("/edit-profile-picture", user_Controller.editProfilePicture);
 router.get("/get-user-profile-image/:id", user_Controller.getProfilePicture);
+router.get("/get-all-posts", user_Controller.getAllPosts);
 module.exports = router;

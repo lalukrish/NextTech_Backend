@@ -93,6 +93,16 @@ const user_Controller = {
       return res.status(500).json({ message: "Internal Server Error" });
     }
   },
+  getAllPosts: async (req, res) => {
+    try {
+      const posts = await Posts.find();
+      return res.status(200).json({ message: "All posts", posts: posts });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Server error,please try again later" });
+    }
+  },
 };
 
 module.exports = user_Controller;
