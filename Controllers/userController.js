@@ -47,16 +47,25 @@ const user_Controller = {
   },
 
   createPost: async (req, res) => {
+    const userId = req.body.id;
+
     const { post_title, description } = req.body;
     try {
       //save image in cloudinary
+      const user = await Users.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
       const result = await cloudinary.v2.uploader.upload(req.file.path);
       const newPost = new Posts({
         post_title,
         description,
         image_url: result.url,
         public_id: result.public_id,
+        user: user._id, // Set the user field to the user's _id
       });
+
+      // Save the new post
       await newPost.save();
       await fs.unlink(req.file.path);
       res
