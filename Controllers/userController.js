@@ -103,6 +103,26 @@ const user_Controller = {
         .json({ message: "Server error,please try again later" });
     }
   },
+  getMyPosts: async (req, res) => {
+    const userId = req.params.id;
+    try {
+      // Assuming Posts is your Mongoose model
+      const myPosts = await Posts.find({ user: userId });
+
+      if (myPosts.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "No posts found for this user." });
+      }
+
+      return res.status(200).json({ message: "My posts", posts: myPosts });
+    } catch (error) {
+      console.error("Error fetching user's posts:", error);
+      return res
+        .status(500)
+        .json({ message: "Internal server error", error: error });
+    }
+  },
 };
 
 module.exports = user_Controller;
