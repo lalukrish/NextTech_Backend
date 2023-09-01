@@ -17,5 +17,6 @@ router.post("/edit-profile-picture", user_Controller.editProfilePicture);
 router.get("/get-user-profile-image/:id", user_Controller.getProfilePicture);
 router.get("/get-all-posts", user_Controller.getAllPosts);
 router.get("/get-my-posts/:id", user_Controller.getMyPosts);
+router.get("/get-one-post/:id", user_Controller.getOnePost);
 
 module.exports = router;
