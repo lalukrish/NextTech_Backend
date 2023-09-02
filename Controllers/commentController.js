@@ -28,6 +28,23 @@ const Comment_Controller = {
       return res.status(500).json({ message: "Interanl server error" });
     }
   },
+
+  get_comment: async (req, res) => {
+    const postId = req.params.post;
+
+    try {
+      const comments = await Comments.find({ post: postId });
+
+      if (!comments || comments.length === 0) {
+        return res.status(404).json({ message: "Comments not found" });
+      }
+
+      return res.status(200).json({ message: "All Comments are", comments });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
 };
 
 module.exports = Comment_Controller;
