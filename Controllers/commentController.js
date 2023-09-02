@@ -45,6 +45,21 @@ const Comment_Controller = {
       return res.status(500).json({ message: "Internal server error" });
     }
   },
+  add_reply: async (req, res) => {
+    const commentId = req.body.commentId;
+    try {
+      const parentComment = await Comments.findById(commentId);
+      const newReply = {
+        reply_text: req.body.reply_text,
+        author: req.body.userId,
+      };
+      parentComment.replies.push(newReply);
+      const savedComment = await parentComment.save();
+      return res.status(200).json({ message: "Sucessfully", savedComment });
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
 };
 
 module.exports = Comment_Controller;

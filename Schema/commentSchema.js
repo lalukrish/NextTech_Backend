@@ -21,11 +21,11 @@ const commentSchema = new mongoose.Schema({
   },
   replies: [
     {
-      text: {
+      reply_text: {
         type: String,
         required: true,
       },
-      likes: {
+      reply_likes: {
         type: Number,
         default: 0,
       },
