@@ -8,9 +8,12 @@ const postSchema = new mongoose.Schema(
     },
     description: {
       type: String,
+      minlength: 10,
+      maxlength: 500,
     },
     number_likes: {
       type: String,
+      default: 0,
     },
     image_url: {
       type: String,
@@ -23,6 +26,13 @@ const postSchema = new mongoose.Schema(
       ref: "Users", // This should match the name you used when defining the Users model
       required: true,
     },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comments",
+        require: true,
+      },
+    ],
   },
   {
     timestamps: true,

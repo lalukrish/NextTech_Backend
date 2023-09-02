@@ -8,6 +8,7 @@ const multer = require("multer");
 const path = require("path");
 
 const userRouter = require("./Routers/userRouter");
+const commentRouter = require("./Routers/commentRouter");
 const bodyParser = require("body-parser");
 
 dotenv.config();
@@ -24,7 +25,7 @@ const storage = multer.diskStorage({
 app.use(multer({ storage }).single("image"));
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
-
+app.use("/comments", commentRouter);
 const DevServer = () => {
   app.listen(6000, () => {
     console.log(`server running on port${6000}`);
