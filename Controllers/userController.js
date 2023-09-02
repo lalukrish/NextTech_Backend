@@ -123,18 +123,6 @@ const user_Controller = {
         .json({ message: "Internal server error", error: error });
     }
   },
-  getOnePost: async (req, res) => {
-    const postId = req.params.id;
-    try {
-      const onePost = await Posts.findById(postId); // Corrected query
-      if (!onePost) {
-        return res.status(404).json({ message: "Post not found" });
-      }
-      return res.status(200).json({ message: "Successful", post: onePost });
-    } catch (error) {
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  },
 };
 
 module.exports = user_Controller;
