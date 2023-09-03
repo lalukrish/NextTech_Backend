@@ -1,5 +1,25 @@
 const mongoose = require("mongoose");
 
+const replySchema = new mongoose.Schema(
+  {
+    reply_text: {
+      type: String,
+      required: true,
+    },
+    reply_likes: {
+      type: Number,
+      default: 0,
+    },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users", // Reference to a User model
+      required: true,
+    },
+  },
+  {
+    timestamps: true, // Add timestamps for replies
+  }
+);
 const commentSchema = new mongoose.Schema(
   {
     text: {
@@ -20,30 +40,10 @@ const commentSchema = new mongoose.Schema(
       ref: "Posts", // Reference to a Post model
       required: true,
     },
-
-    replies: [
-      {
-        reply_text: {
-          type: String,
-          required: true,
-        },
-        reply_likes: {
-          type: Number,
-          default: 0,
-        },
-        author: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Users", // Reference to a User model
-          required: true,
-        },
-      },
-      {
-        timestamps: true,
-      },
-    ],
+    replies: [replySchema], // Use the replySchema for replies
   },
   {
-    timestamps: true,
+    timestamps: true, // Add timestamps for comments
   }
 );
 
