@@ -90,6 +90,25 @@ const Comment_Controller = {
         .json({ message: "Internal Server Error", error: error });
     }
   },
+  unlike_post: async (req, res) => {
+    const postId = req.body.postid;
+    const userId = req.body.userid;
+    try {
+      const post = await Posts.findById(postId);
+      if (!post) {
+        return res.status(404).json({ message: "No Post Found" });
+      }
+      if (!post.likedBy.includes(userId)) {
+        return res.status(400).json({ message: "User is not liked the post" });
+      }
+      post.number_likes = (parseInt(post.number_likes) || 0) - 1;
+      post.likedBy.pop(userId);
+      await post.save();
+      return res.status(200).json({ message: "User unliked the post" });
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
 
   get_no_of_like: async (req, res) => {
     const postId = req.params.postId;
