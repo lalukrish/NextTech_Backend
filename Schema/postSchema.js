@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      minlength: 10,
+      //  minlength: 10,
       maxlength: 500,
     },
     number_likes: {
@@ -26,6 +26,12 @@ const postSchema = new mongoose.Schema(
       ref: "Users", // This should match the name you used when defining the Users model
       required: true,
     },
+    likedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users", // Reference to a User model
+      },
+    ],
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
