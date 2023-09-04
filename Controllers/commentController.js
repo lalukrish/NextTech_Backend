@@ -75,7 +75,7 @@ const Comment_Controller = {
       if (post.likedBy.includes(userId)) {
         return res
           .status(400)
-          .json({ message: "User has already liked the post", post });
+          .json({ message: "User has already liked the post" });
       }
 
       post.number_likes = (parseInt(post.number_likes) || 0) + 1;
