@@ -130,7 +130,10 @@ const user_Controller = {
   getOnePost: async (req, res) => {
     const postId = req.params.id;
     try {
-      const onePost = await Posts.findById(postId); // Corrected query
+      const onePost = await Posts.findById(postId).populate({
+        path: "user",
+        select: "full_name email user_name profile_image_url",
+      }); // Corrected query
       if (!onePost) {
         return res.status(404).json({ message: "Post not found" });
       }
