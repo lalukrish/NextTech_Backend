@@ -95,12 +95,16 @@ const user_Controller = {
   },
   getAllPosts: async (req, res) => {
     try {
-      const posts = await Posts.find();
+      const posts = await Posts.find().populate({
+        path: "user",
+        select: "full_name email user_name profile_image_url",
+      });
+
       return res.status(200).json({ message: "All posts", posts: posts });
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "Server error,please try again later" });
+        .json({ message: "Server error, please try again later" });
     }
   },
   getMyPosts: async (req, res) => {
