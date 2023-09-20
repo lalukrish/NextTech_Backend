@@ -46,6 +46,31 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
+    friends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users",
+      },
+    ],
+  },
+  {
+    friendRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users",
+      },
+    ],
+  },
+  {
+    pendingFriendRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users", // Reference to the Users model
+      },
+    ],
+  },
+
+  {
     timestamps: true,
   }
 );

@@ -19,4 +19,12 @@ router.get("/get-all-posts", user_Controller.getAllPosts);
 router.get("/get-my-posts/:id", user_Controller.getMyPosts);
 router.get("/get-one-post/:id", user_Controller.getOnePost);
 
+//friends
+
+router.post("/send-friend-request", user_Controller.userSendFriendRequest);
+router.post(
+  "/confirm-friend-request",
+  user_Controller.userConfirmFriendRequeset
+);
+
 module.exports = router;
