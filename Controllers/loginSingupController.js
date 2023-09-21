@@ -117,20 +117,22 @@ const Login_Signup_Controller = {
       }
 
       const full_name = req.body.full_name;
+      const role = req.body.role;
+      const bio_information = req.body.bio_information;
       const updateUser = await Users.findByIdAndUpdate(userId, {
         full_name: full_name,
+        role: role,
+        bio_information: bio_information,
       });
 
       if (!updateUser) {
         return res.status(404).json({ message: "User not updated" });
       }
 
-      return res
-        .status(200)
-        .json({
-          message: "User successfully updated",
-          updatedUser: updateUser,
-        });
+      return res.status(200).json({
+        message: "User successfully updated",
+        updatedUser: updateUser,
+      });
     } catch (error) {
       return res
         .status(500)
