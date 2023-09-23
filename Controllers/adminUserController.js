@@ -7,6 +7,7 @@ const AdminRouter = {
   getAllUser: async (req, res) => {
     try {
       const skip = req.query.skip ?? 0;
+
       const users = await Users.find();
       console.log("urers", users);
       return res.status(200).json({ message: "get all users", users: users });
@@ -16,6 +17,7 @@ const AdminRouter = {
         .json({ message: "Internal Server error,Try again later" });
     }
   },
+
   getSingleUser: async (req, res) => {
     try {
       const userId = req.params.userId;
@@ -32,6 +34,31 @@ const AdminRouter = {
       return res
         .status(500)
         .json({ message: "Internal Server Error", error: error.message });
+    }
+  },
+
+  serachByUserName: async (req, res) => {
+    try {
+      const user_name = req.query.user_name;
+      const query = {
+        $or: [{ user_name: { $regex: user_name } }],
+      };
+      const findByQuery = async (query) => {
+        const data = await Users.find(query)
+          .select("full_name user_name profile_image_url role")
+          .catch((e) => {
+            console.log(e);
+          });
+        return data;
+      };
+      const data = await findByQuery(query);
+      if (data) {
+        res.status(200).json({ user_details: data });
+      } else {
+        res.status(404).json({ message: "No Data Found" });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Server Error" });
     }
   },
 

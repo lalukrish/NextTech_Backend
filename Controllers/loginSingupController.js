@@ -128,7 +128,7 @@ const Login_Signup_Controller = {
       if (!updateUser) {
         return res.status(404).json({ message: "User not updated" });
       }
-
+      console.log("usefeUser", updateUser);
       return res.status(200).json({
         message: "User successfully updated",
         updatedUser: updateUser,
