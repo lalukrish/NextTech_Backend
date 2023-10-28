@@ -47,32 +47,25 @@ const userSchema = new mongoose.Schema(
     profile_image_public_id: {
       type: String,
     },
-  },
-  {
     friends: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
       },
     ],
-  },
-  {
     friendRequests: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
       },
     ],
-  },
-  {
     pendingFriendRequests: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users", // Reference to the Users model
+        ref: "Users",
       },
     ],
   },
-
   {
     timestamps: true,
   }

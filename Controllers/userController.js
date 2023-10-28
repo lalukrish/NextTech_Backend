@@ -149,10 +149,21 @@ const user_Controller = {
     try {
       const sender = await Users.findById(userId);
       const receiver = await Users.findById(friendId);
-      if (!sender || receiver) {
+
+      if (!sender || !receiver) {
         return res
           .status(404)
           .json({ message: "Sender or receiver not found" });
+      }
+      if (!sender.friends || !receiver.friends) {
+        return res
+          .status(400)
+          .json({ message: "Sender or receiver has no friends property" });
+      }
+      if (sender.pendingFriendRequests.includes(friendId)) {
+        return res
+          .status(400)
+          .json({ message: "friend request is already sented" });
       }
       if (
         sender.friends.includes(friendId) ||
@@ -161,7 +172,10 @@ const user_Controller = {
         return res.status(400).json({ message: "You are already friends" });
       }
       sender.friendRequests.push(friendId);
+      receiver.friendRequests.push(userId);
+      sender.pendingFriendRequests.push(friendId);
       await sender.save();
+      await receiver.save();
       return res
         .status(200)
         .json({ message: "Friend request sent successfully" });
@@ -185,7 +199,8 @@ const user_Controller = {
       user.friends.push(friendId);
       friend.friends.push(userId);
       user.friendRequests.pull(friendId);
-
+      friend.friendRequests.pull(userId);
+      friend.pendingFriendRequests.pull(userId);
       await user.save();
 
       await friend.save();
