@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/register-course-tech", Course_Controller.registerCourse);
 
 router.get(
-  "/get-all-registered-course-react/:userId",
+  "/get-all-registered-course/:userId",
   Course_Controller.getAllCoursesForUser
 );
 
