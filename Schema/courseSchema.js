@@ -18,7 +18,7 @@ const technologyCourseSchema = new mongoose.Schema({
   total_no_user: {
     type: String,
   },
-  registered_courses: {
+  user_registered: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Users", // Reference to a User model
   },

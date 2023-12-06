@@ -13,7 +13,7 @@ const Course_Controller = {
         course_name,
         title,
 
-        registered_courses: userId, // Reference to the User who registered the course
+        user_registered: userId, // Reference to the User who registered the course
       });
 
       res
@@ -24,14 +24,26 @@ const Course_Controller = {
     }
   },
 
-  getAllUsersForCourseReact: async (req, res) => {
+  getAllCoursesForUser: async (req, res) => {
     try {
-      const title = "react"; // Specify the title value
-      const usersForCourse = await Courses.find({ title })
-        .populate("registered_courses", "username email") // Assuming User model has 'username' and 'email' fields
-        .exec();
-      const userCount = await Courses.countDocuments({ title });
-      res.status(200).json({ usersForCourse, count: userCount });
+      const { userId } = req.params; // Assuming userId is passed as a URL parameter
+      const userCourses = await Courses.find({ user_registered: userId });
+      const reactCourseCount = await Courses.countDocuments({
+        user_registered: userId,
+        course_name: "react",
+      });
+      const htmlCourseCount = await Courses.countDocuments({
+        user_registered: userId,
+        course_name: "html",
+      });
+
+      res.status(200).json({
+        userCourses,
+        counts: {
+          react: reactCourseCount,
+          html: htmlCourseCount,
+        },
+      });
     } catch (error) {
       console.error("Error:", error);
       res.status(500).json({ message: "Internal Server Error" });
