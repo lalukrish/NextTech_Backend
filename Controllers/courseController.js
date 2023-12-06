@@ -36,12 +36,21 @@ const Course_Controller = {
         user_registered: userId,
         course_name: "html",
       });
-
+      const nodejsCourseCount = await Courses.countDocuments({
+        user_registered: userId,
+        course_name: "nodejs",
+      });
+      const cssCourseCount = await Courses.countDocuments({
+        user_registered: userId,
+        course_name: "css",
+      });
       res.status(200).json({
         userCourses,
         counts: {
           react: reactCourseCount,
           html: htmlCourseCount,
+          nodejs: nodejsCourseCount,
+          css: cssCourseCount,
         },
       });
     } catch (error) {
