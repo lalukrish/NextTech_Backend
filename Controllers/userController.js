@@ -4,6 +4,8 @@ const fs = require("fs-extra");
 const cloudinary = require("cloudinary");
 const Posts = require("../Schema/postSchema");
 const Users = require("../Schema/userSchema");
+const UserStatus = require("../Schema/userStatusSchema");
+
 cloudinary.config({
   cloud_name: "dvjjzsilz",
   api_key: "429616765262767",
@@ -146,9 +148,14 @@ const user_Controller = {
   userSendFriendRequest: async (req, res) => {
     const userId = req.body.userId;
     const friendId = req.body.friendId;
+    const notificationMessage = "You have received a friend request.";
+
     try {
       const sender = await Users.findById(userId);
       const receiver = await Users.findById(friendId);
+      const receiverStautsList = await UserStatus.findById(friendId);
+      console.log("receiverStautsList", receiverStautsList);
+      console.log("Friend ID:", friendId);
 
       if (!sender || !receiver) {
         return res
@@ -171,14 +178,27 @@ const user_Controller = {
       ) {
         return res.status(400).json({ message: "You are already friends" });
       }
+      console.log("receiverStautsList", receiverStautsList);
+
+      const newNotification = {
+        message: notificationMessage,
+        senderId: userId,
+      };
+
       sender.friendRequests.push(friendId);
       receiver.friendRequests.push(userId);
       sender.pendingFriendRequests.push(friendId);
+      receiverStautsList.notifications.push({
+        message: notificationMessage,
+        senderId: userId,
+      });
       await sender.save();
       await receiver.save();
-      return res
-        .status(200)
-        .json({ message: "Friend request sent successfully" });
+      await receiverStautsList.save();
+      return res.status(200).json({
+        message: "Friend request sent successfully",
+        status: newNotification,
+      });
     } catch (error) {
       return res.status(500).json({ message: "Interanl Server Error" });
     }

@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const adminRouter = require("./Routers/adminRouter");
+const courseRouter = require("./Routers/courseRouter");
 const app = express();
 const multer = require("multer");
 const path = require("path");
@@ -26,6 +27,7 @@ app.use(multer({ storage }).single("image"));
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
 app.use("/comments", commentRouter);
+app.use("/career", courseRouter);
 const DevServer = () => {
   app.listen(6000, () => {
     console.log(`server running on port${6000}`);
