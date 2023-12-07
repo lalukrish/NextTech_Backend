@@ -47,6 +47,9 @@ const userSchema = new mongoose.Schema(
     profile_image_public_id: {
       type: String,
     },
+    wallet: {
+      type: String,
+    },
     friends: [
       {
         type: mongoose.Schema.Types.ObjectId,

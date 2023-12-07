@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const Users = require("../Schema/userSchema");
+const Wallet = require("../Schema/walletSchema");
+const Coin = require("../Schema/coinSchema");
+
 const Jwt = require("jsonwebtoken");
+const fixedCoins = require("../constantDatas/fixedCoins");
 
 const Login_Signup_Controller = {
   userSignup: async (req, res) => {
@@ -14,20 +18,25 @@ const Login_Signup_Controller = {
       const userName = await Users.findOne({
         user_name: req.body.user_name.toLowerCase(),
       });
+
       const phoneNumber = await Users.findOne({
         phone_number: req.body.phone_number,
       });
+
       if (userEmail) {
-        res.status(409).json({ message: "user email already exists" });
-      } else if (userName) {
-        res.status(409).json({ message: "user name is already exists" });
-      } else if (phoneNumber) {
-        res
+        return res
           .status(409)
-          .json({ message: "user phone number is already exists" });
+          .json({ message: "User with the provided email already exists" });
+      } else if (userName) {
+        return res
+          .status(409)
+          .json({ message: "User with the provided username already exists" });
+      } else if (phoneNumber) {
+        return res.status(409).json({
+          message: "User with the provided phone number already exists",
+        });
       } else {
         const password = req.body.password;
-
         const hashvalue = 12;
         const hashedPassword = await bcrypt.hash(password, hashvalue);
 
@@ -41,24 +50,51 @@ const Login_Signup_Controller = {
         };
 
         const newUser = new Users(data);
+        console.log(newUser);
         try {
-          const saved = await newUser.save();
-          const user_id = saved?._id;
-          return res
-            .status(200)
-            .json({ message: "user signup successfull", user_id: user_id });
+          const savedUser = await newUser.save();
+
+          const coins = fixedCoins.filter((coin) => coin); // This filters out any falsy values
+
+          const randomCoin = coins[Math.floor(Math.random() * coins.length)];
+
+          // Now 'randomCoin' should contain a randomly selected coin from the 'fixedCoins' array
+
+          // Create a new wallet for the user with constant coin data and set quantity to 1 for the first coin
+          const walletCoins = fixedCoins.map((coin) => ({
+            symbol: coin.symbol,
+            name: coin.name,
+            description: coin.description,
+            value: coin.value,
+            quantity: coin.symbol === randomCoin.symbol ? 1 : 0, // Set quantity to 1 for the random coin
+            balance: 0,
+          }));
+
+          const newWallet = new Wallet({
+            user: savedUser._id,
+            coins: walletCoins,
+          });
+
+          const savedWallet = await newWallet.save();
+
+          return res.status(200).json({
+            message: "User signup successful",
+            user_id: savedUser._id,
+            wallet_id: savedWallet._id,
+            coins: savedWallet.coins,
+          });
         } catch (error) {
-          return res.status(400).json({ message: "Singup failed,Try again" });
+          console.error("Signup failed:", error);
+          return res.status(400).json({ message: "Signup failed, try again" });
         }
       }
     } catch (error) {
-      // console.log(
-      //   "🚀 ~ file: loginSingupController.js:7 ~ userSignup ~ err:",
-      //   error
-      // );
-      return res.status(500).json({ message: "Server error,try again", error });
+      return res
+        .status(500)
+        .json({ message: "Server error, try again", error });
     }
   },
+
   userSignin: async (req, res) => {
     if (!req.body.email || !req.body.password) {
       return res
@@ -89,6 +125,8 @@ const Login_Signup_Controller = {
           .status(401)
           .json({ message: "Login Failed! Incorrect password" });
       }
+      const userWallet = await Wallet.findOne({ user: username_or_email._id });
+
       const token = Jwt.sign(
         {
           _id: username_or_email?._id ?? with_username?._id,
@@ -99,6 +137,8 @@ const Login_Signup_Controller = {
         message: "Login successfull",
         token: token,
         user: username_or_email,
+        wallet_id: userWallet._id,
+        wallet: userWallet.coins,
       });
     } catch (error) {
       return res
